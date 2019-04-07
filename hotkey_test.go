@@ -8,10 +8,10 @@ import (
 )
 
 func TestTest(t *testing.T) {
-	hotkeys = []hotkey{
-		hotkey{
-			description: "Atom: Insert new line after current line",
-			command:     "command enter",
+	questions = []question{
+		question{
+			prompt: "Atom: Insert new line after current line",
+			answer: "command enter",
 		},
 	}
 
@@ -28,7 +28,7 @@ func TestTest(t *testing.T) {
 		input := fmt.Sprintf("%s\n", test.input)
 		stdin = strings.NewReader(input)
 		stdout := bytes.NewBufferString("")
-		Test(hotkeys[0], stdout)
+		Test(questions[0], stdout)
 
 		if !strings.Contains(stdout.String(), test.expected) {
 			t.Errorf("For input %s: got %s, expected %s", input, stdout.String(), test.expected)
