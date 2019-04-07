@@ -3,42 +3,52 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"math/rand"
 	"os"
 	"strings"
 	"time"
 )
 
+const (
+	successMsg = "Correct!\n"
+	failureMsg = "Not quite, try again. Type 'solution' to see the answer.\n"
+	solution   = "solution"
+)
+
+var stdin io.Reader
+
 func main() {
+	stdin = os.Stdin
 	for {
 		rand.Seed(time.Now().Unix())
 		hotkey := hotkeys[rand.Intn(len(hotkeys))]
-		test(hotkey)
+		Test(hotkey, os.Stdout)
 	}
 }
 
-func test(h hotkey) {
-	fmt.Println(h.description)
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("-> ")
+func Test(h hotkey, stdout io.Writer) {
+	fmt.Fprintln(stdout, h.description)
+
+	reader := bufio.NewReader(stdin)
+	fmt.Fprint(stdout, "-> ")
 
 	input, err := reader.ReadString('\n')
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(stdout, err)
 		return
 	}
 
 	input = strings.TrimSuffix(input, "\n")
-	if input == "solution" {
-		fmt.Printf("%s\n\n", h.command)
+	if input == solution {
+		fmt.Fprintf(stdout, "%s\n\n", h.command)
 		return
 	}
 
 	if input != h.command {
-		fmt.Printf("%s\n\n", input)
-		fmt.Println("Not quite, try again. Type 'solution' to see the answer.\n")
-		test(h)
+		fmt.Fprintln(stdout, failureMsg)
+		Test(h, stdout)
 	} else {
-		fmt.Println("Correct!\n")
+		fmt.Fprintln(stdout, successMsg)
 	}
 }
