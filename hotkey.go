@@ -22,13 +22,13 @@ func main() {
 	stdin = os.Stdin
 	for {
 		rand.Seed(time.Now().Unix())
-		hotkey := hotkeys[rand.Intn(len(hotkeys))]
-		Test(hotkey, os.Stdout)
+		question := questions[rand.Intn(len(questions))]
+		Test(question, os.Stdout)
 	}
 }
 
-func Test(h hotkey, stdout io.Writer) {
-	fmt.Fprintln(stdout, h.description)
+func Test(q question, stdout io.Writer) {
+	fmt.Fprintln(stdout, q.prompt)
 
 	reader := bufio.NewReader(stdin)
 	fmt.Fprint(stdout, "-> ")
@@ -41,13 +41,13 @@ func Test(h hotkey, stdout io.Writer) {
 
 	input = strings.TrimSuffix(input, "\n")
 	if input == solution {
-		fmt.Fprintf(stdout, "%s\n\n", h.command)
+		fmt.Fprintf(stdout, "%s\n\n", q.answer)
 		return
 	}
 
-	if input != h.command {
+	if input != q.answer {
 		fmt.Fprintln(stdout, failureMsg)
-		Test(h, stdout)
+		Test(q, stdout)
 	} else {
 		fmt.Fprintln(stdout, successMsg)
 	}

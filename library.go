@@ -1,37 +1,37 @@
 package main
 
-type hotkey struct {
-	description string
-	command     string
+type question struct {
+	prompt string
+	answer string
 }
 
-var hotkeys = []hotkey{
-	hotkey{
-		description: "Atom: Insert new line after current line",
-		command:     "command enter",
+var questions = []question{
+	question{
+		prompt: "Atom: Insert new line after current line",
+		answer: "command enter",
 	},
-	hotkey{
-		description: "Atom: Insert new line before current line",
-		command:     "command shift enter",
+	question{
+		prompt: "Atom: Insert new line before current line",
+		answer: "command shift enter",
 	},
-	hotkey{
-		description: "Atom: Delete current line",
-		command:     "control shift k",
+	question{
+		prompt: "Atom: Delete current line",
+		answer: "control shift k",
 	},
-	hotkey{
-		description: "Atom: Move current line up",
-		command:     "control command up",
+	question{
+		prompt: "Atom: Move current line up",
+		answer: "control command up",
 	},
-	hotkey{
-		description: "Atom: Move current line down",
-		command:     "control command down",
+	question{
+		prompt: "Atom: Move current line down",
+		answer: "control command down",
 	},
-	hotkey{
-		description: "Atom: Duplicate current line",
-		command:     "shift command d",
+	question{
+		prompt: "Atom: Duplicate current line",
+		answer: "shift command d",
 	},
-	hotkey{
-		description: "Atom: Join current and next lines",
-		command:     "command j",
+	question{
+		prompt: "Atom: Join current and next lines",
+		answer: "command j",
 	},
 }
