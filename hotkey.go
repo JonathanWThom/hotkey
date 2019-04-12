@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"database/sql"
 	"fmt"
 	"io"
 	"math/rand"
@@ -17,8 +18,19 @@ const (
 )
 
 var stdin io.Reader
+var db *sql.DB
 
 func main() {
+	db, err := sql.Open("postgres", "dbname=hotkey sslmode=disable")
+	if err != nil {
+		panic(err)
+	}
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
 	stdin = os.Stdin
 	for {
 		rand.Seed(time.Now().Unix())
