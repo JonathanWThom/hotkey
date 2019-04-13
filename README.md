@@ -28,14 +28,6 @@ Vim (NERDTree): Toggle tree
 control n
 ```
 
-### Todo
-
-* It would be nice to read keystrokes, instead of entering the names of the commands. [termbox-go](https://github.com/nsf/termbox-go) might be what I need to use.
-* Add/edit/delete records.
-* Keep score.
-* Dockerize?
-* Create a web ui?
-
 ### License
 
 MIT
