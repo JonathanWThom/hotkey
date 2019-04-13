@@ -21,6 +21,7 @@ const (
 
 var stdin io.Reader
 var db *sql.DB
+var questions []question
 
 func main() {
 	var err error
