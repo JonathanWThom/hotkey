@@ -9,6 +9,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 const (
@@ -21,7 +23,8 @@ var stdin io.Reader
 var db *sql.DB
 
 func main() {
-	db, err := sql.Open("postgres", "dbname=hotkey sslmode=disable")
+	var err error
+	db, err = sql.Open("postgres", "dbname=hotkey sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -32,6 +35,11 @@ func main() {
 	}
 
 	stdin = os.Stdin
+	questions, err := allQuestions()
+	if err != nil {
+		panic(err)
+	}
+
 	for {
 		rand.Seed(time.Now().Unix())
 		question := questions[rand.Intn(len(questions))]

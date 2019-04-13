@@ -1,37 +1,35 @@
 package main
 
+import (
+	_ "github.com/lib/pq"
+)
+
 type question struct {
 	prompt string
 	answer string
 }
 
-var questions = []question{
-	question{
-		prompt: "Atom: Insert new line after current line",
-		answer: "command enter",
-	},
-	question{
-		prompt: "Atom: Insert new line before current line",
-		answer: "command shift enter",
-	},
-	question{
-		prompt: "Atom: Delete current line",
-		answer: "control shift k",
-	},
-	question{
-		prompt: "Atom: Move current line up",
-		answer: "control command up",
-	},
-	question{
-		prompt: "Atom: Move current line down",
-		answer: "control command down",
-	},
-	question{
-		prompt: "Atom: Duplicate current line",
-		answer: "shift command d",
-	},
-	question{
-		prompt: "Atom: Join current and next lines",
-		answer: "command j",
-	},
+func allQuestions() ([]question, error) {
+	sql := `
+		SELECT prompt, answer 
+		FROM questions 
+	`
+	rows, err := db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	var questions = []question{}
+	for rows.Next() {
+		question := question{}
+		err := rows.Scan(&question.prompt, &question.answer)
+		if err != nil {
+			return nil, err
+		}
+
+		questions = append(questions, question)
+	}
+
+	return questions, nil
 }
