@@ -22,6 +22,7 @@ func TestTest(t *testing.T) {
 		{"command enter", successMsg},
 		{"wrong", failureMsg},
 		{"solution", "command enter"},
+		{"hint", "c****** ****r"},
 	}
 
 	for _, test := range tests {
