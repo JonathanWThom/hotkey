@@ -28,6 +28,6 @@ Vim (NERDTree): Toggle tree
 control n
 ```
 
-### License
+### LICENSE
 
 MIT
