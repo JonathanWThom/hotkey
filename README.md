@@ -9,10 +9,18 @@ Requires Go and PostgreSQL.
 
 1. `go get -u github.com/JonathanWThom/hotkey`
 2. In Postgres, run the contents of `database.sql`.
-3. Add some questions and answers: `INSERT INTO questions (prompt, answer) VALUES('Atom: Move current line down:', 'control command down');`
+3. Add questions and answers via CLI (see [Features](#Features)).
 4. Run `./hotkey`
 
 ### Features
+
+##### Adding Questions
+
+```
+./hotkey -add "my question:my answer"
+```
+
+##### Answering Questions
 
 ```
 Atom: Move current line down:

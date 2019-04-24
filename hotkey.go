@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"database/sql"
+	"flag"
 	"fmt"
 	"io"
 	"math/rand"
@@ -24,6 +25,7 @@ const (
 var stdin io.Reader
 var db *sql.DB
 var questions []question
+var add = flag.String("add", "", "add a new question with the following format: \"my prompt:my answer\"")
 
 func main() {
 	var err error
@@ -35,6 +37,18 @@ func main() {
 	err = db.Ping()
 	if err != nil {
 		panic(err)
+	}
+
+	flag.Parse()
+	if *add != "" {
+		err := NewQuestion(*add)
+		if err != nil {
+			fmt.Printf("Unable add to add question. Error: %v\n", err)
+			return
+		}
+
+		fmt.Println("Question successfully added.")
+		return
 	}
 
 	stdin = os.Stdin
