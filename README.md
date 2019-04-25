@@ -14,10 +14,29 @@ Requires Go and PostgreSQL.
 
 ### Features
 
-##### Adding Questions
+##### Adding, Listing, & Updating Questions
 
+Add
 ```
-./hotkey -add "my question:my answer"
+./hotkey -add "my prompt:my answer"
+Question successfully added.
+./hotkey -add "another prompt:another answer"
+```
+
+List
+```
+./hotkey -all
+1. my prompt: my answer
+2. another prompt: another answer
+```
+
+Update
+```
+./hotkey -edit "2:modified prompt:modified answer"
+Question successfully updated.
+./hotkey -all
+1. my prompt: my answer
+2. modified prompt: modified answer
 ```
 
 ##### Answering Questions

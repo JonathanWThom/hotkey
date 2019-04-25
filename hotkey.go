@@ -25,9 +25,12 @@ const (
 var stdin io.Reader
 var db *sql.DB
 var questions []question
-var add = flag.String("add", "", "add a new question with the following format: \"my prompt:my answer\"")
+var add = flag.String("add", "", "Add a new question with the following format: \"my prompt:my answer\"")
+var all = flag.Bool("all", false, "List all questions and answers")
+var edit = flag.String("edit", "", "Edit question with the following format: \"1:my new prompt:my new answer\"")
 
 func main() {
+	// Connect to database
 	var err error
 	db, err = sql.Open("postgres", "dbname=hotkey sslmode=disable")
 	if err != nil {
@@ -39,11 +42,13 @@ func main() {
 		panic(err)
 	}
 
+	// Flags
 	flag.Parse()
+
 	if *add != "" {
 		err := NewQuestion(*add)
 		if err != nil {
-			fmt.Printf("Unable add to add question. Error: %v\n", err)
+			fmt.Printf("Unable to add question. Error: %v\n", err)
 			return
 		}
 
@@ -51,6 +56,24 @@ func main() {
 		return
 	}
 
+	if *all {
+		list, _ := listAllQuestions()
+		fmt.Println(list)
+		return
+	}
+
+	if *edit != "" {
+		err := EditQuestion(*edit)
+		if err != nil {
+			fmt.Printf("Unable to edit question. Error: %v\n", err)
+			return
+		}
+
+		fmt.Println("Question successfully updated.")
+		return
+	}
+
+	// Process Q & A
 	stdin = os.Stdin
 	questions, err := allQuestions()
 	if err != nil {

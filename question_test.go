@@ -2,8 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/lib/pq"
+	"math/rand"
 	"testing"
+	"time"
 )
 
 func TestNewQuestion(t *testing.T) {
@@ -24,13 +27,40 @@ func TestNewQuestion(t *testing.T) {
 	for _, test := range tests {
 		err := NewQuestion(test.input)
 		if err != test.expected {
-			t.Errorf("For input %s: got %s, expected %s", test.input, err, test.expected)
+			testError(t, test.input, err, test.expected)
 		}
 	}
 
 	teardown()
 }
 
+func TestEditQuestion(t *testing.T) {
+	setup()
+	// need to add some questions here
+	for i := 0; i < 2; i++ {
+		buildQuestion()
+	}
+
+	tests := []struct {
+		input    string
+		expected error
+	}{
+		{"1:new prompt:new answer", nil},
+		{"new prompt:new answer", invalidFormat},
+		{"3:new prompt:new answer", notFound},
+	}
+
+	for _, test := range tests {
+		err := EditQuestion(test.input)
+		if err != test.expected {
+			testError(t, test.input, err, test.expected)
+		}
+	}
+
+	teardown()
+}
+
+// Helpers
 func setup() {
 	var err error
 	db, err = sql.Open("postgres", "dbname=hotkey_test sslmode=disable")
@@ -50,4 +80,20 @@ func teardown() {
 	`
 	db.Exec(query)
 	db = &sql.DB{}
+}
+
+func testError(t *testing.T, input string, err error, expected error) {
+	t.Errorf("For input %s: got %s, expected %s", input, err, expected)
+}
+
+// Factories
+func buildQuestion() error {
+	sourc := rand.NewSource(time.Now().UnixNano())
+	rand := rand.New(sourc)
+	num := rand.Intn(100)
+	prompt := fmt.Sprintf("prompt-%d", num)
+	answer := fmt.Sprintf("answer-%d", num)
+	question := question{prompt: prompt, answer: answer}
+
+	return addQuestion(&question)
 }
