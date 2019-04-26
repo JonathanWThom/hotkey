@@ -55,6 +55,24 @@ func allQuestions() ([]question, error) {
 	return questions, nil
 }
 
+// DeleteQuestion receives an int and deletes the corresponding question, based on what its number is in the
+// allQuestions list.
+func DeleteQuestion(selected int) error {
+	questions, err := allQuestions()
+	if err != nil {
+		return err
+	}
+
+	err = questionInRange(selected, questions)
+	if err != nil {
+		return err
+	}
+
+	question := findQuestion(selected, questions)
+
+	return question.destroy()
+}
+
 // EditQuestion receives a string and parses it, ultimately updating a question
 // in the database
 func EditQuestion(params string) error {
@@ -73,16 +91,21 @@ func EditQuestion(params string) error {
 		return err
 	}
 
-	if selected > len(questions) {
-		return errNotFound
+	err = questionInRange(selected, questions)
+	if err != nil {
+		return err
 	}
 
-	index := selected - 1
-	question := questions[index]
+	question := findQuestion(selected, questions)
 	question.prompt = args[1]
 	question.answer = args[2]
 
 	return question.update()
+}
+
+func findQuestion(selected int, questions []question) question {
+	index := selected - 1
+	return questions[index]
 }
 
 func invalidEditQuestionArgs(args []string) bool {
@@ -123,7 +146,25 @@ func NewQuestion(params string) error {
 	return addQuestion(question)
 }
 
+func questionInRange(selected int, questions []question) error {
+	if selected > len(questions) || selected < 1 {
+		return errNotFound
+	}
+
+	return nil
+}
+
 // Question methods
+func (q *question) destroy() error {
+	sql := `
+		DELETE FROM questions
+		WHERE id = $1
+	`
+	_, err := db.Exec(sql, q.id)
+
+	return err
+}
+
 func (q *question) String() string {
 	return fmt.Sprintf("%s: %s", q.prompt, q.answer)
 }

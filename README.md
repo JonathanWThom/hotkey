@@ -14,7 +14,7 @@ Requires Go and PostgreSQL.
 
 ### Features
 
-##### Adding, Listing, & Updating Questions
+#### Adding, Listing, & Updating Questions
 
 Add
 ```
@@ -39,7 +39,15 @@ Question successfully updated.
 2. modified prompt: modified answer
 ```
 
-##### Answering Questions
+Delete
+```
+./hotkey -delete=2
+Question successfully deleted.
+./hotkey -all
+1. my prompt: my answer
+```
+
+#### Answering Questions
 
 ```
 Atom: Move current line down:

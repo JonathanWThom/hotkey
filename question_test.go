@@ -34,9 +34,32 @@ func TestNewQuestion(t *testing.T) {
 	teardown()
 }
 
+func TestDeleteQuestion(t *testing.T) {
+	setup()
+	buildQuestion()
+
+	tests := []struct {
+		input    int
+		expected error
+	}{
+		{1, nil},
+		{0, errNotFound},
+		{2, errNotFound},
+	}
+
+	for _, test := range tests {
+		err := DeleteQuestion(test.input)
+		if err != test.expected {
+			t.Errorf("For input %d: got %s, expected %s", test.input, err, test.expected)
+		}
+	}
+
+	teardown()
+}
+
 func TestEditQuestion(t *testing.T) {
 	setup()
-	// need to add some questions here
+
 	for i := 0; i < 2; i++ {
 		buildQuestion()
 	}

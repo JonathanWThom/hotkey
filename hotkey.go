@@ -28,6 +28,7 @@ var questions []question
 var add = flag.String("add", "", "Add a new question with the following format: \"my prompt:my answer\"")
 var all = flag.Bool("all", false, "List all questions and answers")
 var edit = flag.String("edit", "", "Edit question with the following format: \"1:my new prompt:my new answer\"")
+var delete = flag.Int("delete", 0, "Delete question by number, corresponding with how it appears in the -all list.")
 
 func main() {
 	// Connect to database
@@ -45,6 +46,7 @@ func main() {
 	// Flags
 	flag.Parse()
 
+	// refactor similar flag methods?
 	if *add != "" {
 		err := NewQuestion(*add)
 		if err != nil {
@@ -70,6 +72,17 @@ func main() {
 		}
 
 		fmt.Println("Question successfully updated.")
+		return
+	}
+
+	if *delete != 0 {
+		err := DeleteQuestion(*delete)
+		if err != nil {
+			fmt.Printf("Unable able to delete question. Error: %v\n", err)
+			return
+		}
+
+		fmt.Println("Question successfully deleted.")
 		return
 	}
 
