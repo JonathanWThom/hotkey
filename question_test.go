@@ -18,10 +18,10 @@ func TestNewQuestion(t *testing.T) {
 	}{
 		{"prompt:answer", nil},
 		{"prompt with space:answer with space", nil},
-		{":missing prompt has colon", invalidFormat},
-		{"missing answer has colon:", invalidFormat},
-		{"one argument", invalidFormat},
-		{"too:many:arguments", invalidFormat},
+		{":missing prompt has colon", errInvalidFormat},
+		{"missing answer has colon:", errInvalidFormat},
+		{"one argument", errInvalidFormat},
+		{"too:many:arguments", errInvalidFormat},
 	}
 
 	for _, test := range tests {
@@ -46,8 +46,8 @@ func TestEditQuestion(t *testing.T) {
 		expected error
 	}{
 		{"1:new prompt:new answer", nil},
-		{"new prompt:new answer", invalidFormat},
-		{"3:new prompt:new answer", notFound},
+		{"new prompt:new answer", errInvalidFormat},
+		{"3:new prompt:new answer", errNotFound},
 	}
 
 	for _, test := range tests {

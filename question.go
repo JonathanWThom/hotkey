@@ -3,13 +3,14 @@ package main
 import (
 	"errors"
 	"fmt"
-	_ "github.com/lib/pq"
 	"strconv"
 	"strings"
+
+	_ "github.com/lib/pq"
 )
 
-var invalidFormat = errors.New("Invalid question format.")
-var notFound = errors.New("Question not found.")
+var errInvalidFormat = errors.New("invalid question format")
+var errNotFound = errors.New("question not found")
 
 type question struct {
 	id     int
@@ -54,10 +55,12 @@ func allQuestions() ([]question, error) {
 	return questions, nil
 }
 
+// EditQuestion receives a string and parses it, ultimately updating a question
+// in the database
 func EditQuestion(params string) error {
 	args := strings.Split(params, ":")
 	if invalidEditQuestionArgs(args) {
-		return invalidFormat
+		return errInvalidFormat
 	}
 
 	questions, err := allQuestions()
@@ -71,7 +74,7 @@ func EditQuestion(params string) error {
 	}
 
 	if selected > len(questions) {
-		return notFound
+		return errNotFound
 	}
 
 	index := selected - 1
@@ -108,10 +111,12 @@ func listAllQuestions() (string, error) {
 	return joined, nil
 }
 
+// NewQuestion receives a string, and then builds a new question that is saved to
+// the database.
 func NewQuestion(params string) error {
 	args := strings.Split(params, ":")
 	if invalidQuestionArgs(args) {
-		return invalidFormat
+		return errInvalidFormat
 	}
 	question := &question{prompt: args[0], answer: args[1]}
 

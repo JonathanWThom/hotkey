@@ -87,6 +87,8 @@ func main() {
 	}
 }
 
+// Test reads input while in the repl, and responds to a correct answer, an
+// incorrect answer, a request for a hint, or a request for the solution.
 func Test(q question, stdout io.Writer) {
 	fmt.Fprintln(stdout, q.prompt)
 
