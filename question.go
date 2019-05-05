@@ -19,6 +19,8 @@ type question struct {
 }
 
 func addQuestion(question *question) error {
+	question.cleanup()
+
 	sql := `
 		INSERT INTO questions (prompt, answer)
 		VALUES($1, $2)
@@ -155,6 +157,11 @@ func questionInRange(selected int, questions []question) error {
 }
 
 // Question methods
+func (q *question) cleanup() {
+	q.prompt = strings.TrimSpace(q.prompt)
+	q.answer = strings.TrimSpace(q.answer)
+}
+
 func (q *question) destroy() error {
 	sql := `
 		DELETE FROM questions
@@ -170,6 +177,8 @@ func (q *question) String() string {
 }
 
 func (q *question) update() error {
+	q.cleanup()
+
 	sql := `
 		UPDATE questions
 		SET prompt = $1, answer = $2
